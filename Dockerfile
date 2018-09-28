@@ -4,12 +4,8 @@ FROM php:7.2-apache
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get -y install git \
-                       libjpeg62-turbo-dev \
-                       libpng12-dev \
-                       libpng-dev \
                        libpq-dev \
                        mysql-client \
-                       imagemagick \
                        unzip \
                        wget
 
