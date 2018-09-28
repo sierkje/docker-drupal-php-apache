@@ -1,7 +1,7 @@
 FROM php:7.2-apache
 
 # Install packages.
-RUN apt-get update &&
+RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get -y install git \
                        libjpeg62-turbo-dev \
