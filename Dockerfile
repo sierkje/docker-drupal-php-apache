@@ -44,8 +44,8 @@ RUN wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/down
     mv drush.phar /usr/bin/drush
 
 # Install Drupal Console Launcher.
-RUN curl https://drupalconsole.com/installer -L -o drupal.phar && /
-    chmod +x drupal.phar
+RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \
+    chmod +x drupal.phar && \
     mv drupal.phar /usr/bin/drupal
 
 # Clean up.
