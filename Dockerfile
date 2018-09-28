@@ -54,7 +54,7 @@ RUN rm -rf /tmp/* && \
     apt-get autoclean && \
     apt-get clean
 
-WORKDIR /app
-
-RUN ['chmod', '+x', '/entrypoint.sh']
-CMD ['/entrypoint.sh']
+ENTRYPOINT ["docker-php-entrypoint"]
+WORKDIR /var/www/html
+EXPOSE 80
+CMD ["apache2-foreground"]
