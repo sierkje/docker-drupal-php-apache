@@ -1,12 +1,62 @@
 FROM php:7.2-apache
 
-# Install packages
-RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
-  DEBIAN_FRONTEND=noninteractive apt-get -y install supervisor pwgen && \
-  DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-client
+# Install packages.
+RUN apt-get update &&
+    apt-get -y upgrade && \
+    apt-get -y install git \
+                       libjpeg62-turbo-dev \
+                       libpng12-dev \
+                       libpng-dev \
+                       libpq-dev \
+                       mysql-client \
+                       imagemagick \
+                       unzip \
+                       wget
 
-EXPOSE 80
-EXPOSE 443
+# Configure PHP extensions.
+RUN docker-php-ext-configure gd \
+                             --with-jpeg-dir=/usr \
+                             --with-png-dir=/usr && \
+    docker-php-ext-configure opcache \
+                             --enable-opcache
 
-CMD exec supervisord -n
+# Install PHP extensions.
+RUN docker-php-ext-install gd \
+                           mbstring \
+                           opcache \
+                           pdo \
+                           pdo_mysql \
+                           pdo_pgsql \
+                           mysqli \
+                           zip
+# Install Redis.
+RUN pecl install redis && \
+    docker-php-ext-enable redis
+
+# Install Composer.
+RUN curl -sS https://getcomposer.org/installer | php && \
+    chmod +x composer.phar && \
+    mv composer.phar /usr/local/bin/composer
+
+# Install Drush Launcher.
+RUN wget -O drush.phar https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar && \
+    chmod +x drush.phar && \
+    mv drush.phar /usr/bin/drush
+
+# Install Drupal Console Launcher.
+RUN curl https://drupalconsole.com/installer -L -o drupal.phar && /
+    chmod +x drupal.phar
+    mv drupal.phar /usr/bin/drupal
+
+# Clean up.
+RUN rm -rf /tmp/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/tmp/* && \
+    apt-get autoremove -y && \
+    apt-get autoclean && \
+    apt-get clean
+
+WORKDIR /app
+
+RUN ['chmod', '+x', '/entrypoint.sh']
+CMD ['/entrypoint.sh']
