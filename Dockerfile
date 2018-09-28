@@ -4,8 +4,7 @@ FROM php:7.2-apache
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
   DEBIAN_FRONTEND=noninteractive apt-get -y install supervisor pwgen && \
-  apt-get -y install mysql-client && \
-  apt-get -y install postgresql-client
+  DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-client
 
 EXPOSE 80
 EXPOSE 443
